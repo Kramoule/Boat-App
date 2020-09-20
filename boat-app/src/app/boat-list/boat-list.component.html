@@ -1,0 +1,7 @@
+<h1>Boat list</h1>
+
+<mat-selection-list #boatList [multiple]="false">
+    <mat-list-option *ngFor="let boat of boatList" [value]="1">
+        {{boat}}
+      </mat-list-option>
+</mat-selection-list>

@@ -3,14 +3,24 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { LoginComponent } from './login/login.component';
+import { BoatListComponent } from './boat-list/boat-list.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
+import {MatListModule} from '@angular/material/list'; 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent,
+    BoatListComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
