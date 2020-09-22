@@ -1,7 +1,27 @@
-<h1>Boat list</h1>
+<mat-toolbar>
+  Boat list
+</mat-toolbar>
 
-<mat-selection-list #boatList [multiple]="false">
-    <mat-list-option *ngFor="let boat of boatList" [value]="1">
-        {{boat}}
-      </mat-list-option>
-</mat-selection-list>
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let boat of boatList">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+      {{boat.name}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-card>
+      <img mat-card-image *ngIf="boat.photo !== undefined" src="boat.photo?" alt="Photo of the boat">
+      <mat-card-content>
+        <p>
+         {{boat.description}}
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button (click)="openRemoveDialog(boat.id)" color="warn" mat-flat-button>Remove</button>
+        <button mat-flat-button>Update</button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<button style="margin-top: 20px;" (click)="openAddDialog()" color="primary" mat-flat-button>Add</button>
