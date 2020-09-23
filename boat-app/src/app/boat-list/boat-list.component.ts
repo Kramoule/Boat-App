@@ -26,15 +26,18 @@ export class BoatListComponent implements OnInit {
   ngOnInit(): void {}
 
   fetchList(): void {
-    this.connection.getBoatList().then(list => this.boatList = list);
+    this.connection.getBoatList().subscribe(list => this.boatList = list);
   }
 
   removeBoat(id: number): void {
-    this.connection.removeBoatById(id).then((list) => this.boatList = list);
+    this.connection.removeBoatById(id).subscribe(() => {
+      console.log('Delete Successfully');
+      this.boatList = this.boatList.filter(b => b.id !== id);
+    });
   }
 
   addBoat(boat: Boat): void{
-    this.connection.addBoat(boat).then(list => this.boatList = list);
+    this.connection.addBoat(boat).subscribe(b => this.boatList.push(b));
   }
 
   openAddDialog(): void {

@@ -1,4 +1,7 @@
+import { HttpClient } from '@angular/common/http';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Boat } from './boat';
 
@@ -7,7 +10,8 @@ import { Boat } from './boat';
 })
 export class ServerConnectionService {
 
-  API_ENDPOINT = environment.api_endpoint;
+  SERVER_ADDRESS = environment.server_address;
+  API_ENDPOINT = this.SERVER_ADDRESS+"/boats";
 
   boatList : Boat[]= [
     new Boat('Small Boat', 'That\'s a very small boat'),
@@ -16,19 +20,18 @@ export class ServerConnectionService {
     new Boat('Yacht', 'Father of all boats. You want to get one.')
   ];
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  public async getBoatList(): Promise<Boat[]> {
-    return this.boatList;
+  public getBoatList(): Observable<Boat[]> {
+    return this.http.get<Boat[]>(this.API_ENDPOINT);
   }
 
   public async getBoat(boatId: number): Promise<Boat> {
     return this.boatList.find(b => b.id !== boatId);
   }
 
-  public async addBoat(boat: Boat): Promise<Boat[]> {
-    this.boatList.push(boat);
-    return this.boatList;
+  public addBoat(boat: Boat): Observable<Boat> {
+    return this.http.post<Boat>(this.API_ENDPOINT, boat);
   }
 
   public async updateBoat(boat: Boat): Promise<Boat[]> {
@@ -37,12 +40,11 @@ export class ServerConnectionService {
     return this.boatList;
   }
 
-  public async removeBoatById(boatId: number): Promise<Boat[]> {
-    this.boatList = this.boatList.filter(b => b.id !== boatId);
-    return this.boatList;
+  public removeBoatById(boatId: number): Observable<any> {
+    return this.http.delete<any>(`${this.API_ENDPOINT}/${boatId}`);
   }
 
-  public async removeBoat(boat: Boat): Promise<Boat[]> {
+  public removeBoat(boat: Boat): Observable<any> {
     return this.removeBoatById(boat.id);
   }
 

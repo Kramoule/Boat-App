@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api_endpoint: "127.0.0.1"
+  server_address: 'http://127.0.0.1:8080'
 };
 
 /*
