@@ -1,11 +1,10 @@
 package ch.vitali.boatapp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "boats")
 public class Boat {
 
     private @Id @GeneratedValue Long id;
