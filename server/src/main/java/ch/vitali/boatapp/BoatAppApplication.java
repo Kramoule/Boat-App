@@ -14,12 +14,14 @@ public class BoatAppApplication {
 
 	// Populate the initial DB with default boats
 	@Bean
-	public CommandLineRunner boatList(BoatRepository repository) {
+	public CommandLineRunner boatList(BoatRepository boatRepo, UserRepository userRepo) {
 		return (args) -> {
-			repository.save(new Boat("Small Boat", "This is a tiny boat."));
-			repository.save(new Boat("Nice Boat", "Among all the boats, this one is the prettiest."));
-			repository.save(new Boat("Big Boat", "You can invite your whole fammily on this boat!"));
-			repository.save(new Boat("Yacht", "Father of all boats, you can show off what you have with this one."));
+			boatRepo.save(new Boat("Small Boat", "This is a tiny boat."));
+			boatRepo.save(new Boat("Nice Boat", "Among all the boats, this one is the prettiest."));
+			boatRepo.save(new Boat("Big Boat", "You can invite your whole family on this boat!"));
+			boatRepo.save(new Boat("Yacht", "Father of all boats, you can show off what you have with this one."));
+
+			userRepo.save(new User("admin", PasswordUtils.hashPassword("password")));
 		};
 	}
 }
