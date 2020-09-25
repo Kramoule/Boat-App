@@ -17,3 +17,9 @@ You must have JAVA and @angular/cli installed on the host
 
 1. Go the the `server/` folder and run `mvnw spring-boot:run` to start the backend
 2. Go the the `boat-app` folder and run `ng serve` to start the web app 
+
+
+# TODO
+
+- [ ] Add validators to login inputs
+- [ ] Write tests
