@@ -43,7 +43,7 @@ export class AuthService {
     localStorage.setItem('token', token);
   }
 
-  public logout() {
+  public logout(): void {
     localStorage.removeItem('token');
   }
 }

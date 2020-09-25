@@ -15,10 +15,8 @@ export class LoginComponent implements OnInit {
   textInfo = '';
   constructor(private auth: AuthService, private router: Router) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
-  
 
   public login(username: string, password: string): void {
     this.auth.login(username, password).subscribe(

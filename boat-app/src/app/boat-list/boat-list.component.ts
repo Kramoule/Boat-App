@@ -30,7 +30,6 @@ export class BoatListComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog) {
       this.isLoading = true;
-      console.log(this.activatedRoute.snapshot.params)
       this.username = this.activatedRoute.snapshot.params.username;
       this.fetchList();
   }
