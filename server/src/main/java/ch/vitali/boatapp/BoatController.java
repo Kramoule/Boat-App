@@ -20,9 +20,25 @@ public class BoatController {
     }
 
     @CrossOrigin(origins = "*")
+    @GetMapping("/boats/{id}")
+    public Boat getBoat(@PathVariable Long id) {
+        return repository.getOne(id);
+    }
+
+    @CrossOrigin(origins = "*")
     @PostMapping("/boats")
     public Boat addBoat(@RequestBody Boat boat) {
         return repository.save(boat);
+    }
+
+    @CrossOrigin(origins = "*")
+    @PutMapping("/boats/{id}")
+    public Boat updateBoat(@PathVariable Long id, @RequestBody Boat boat) {
+        Boat oldBoat = repository.getOne(id);
+        oldBoat.setName(boat.getName());
+        oldBoat.setDescription(boat.getDescription());
+        oldBoat.setPhotoPath(boat.getPhotoPath());
+        return repository.save(oldBoat);
     }
 
     @CrossOrigin(origins = "*")
