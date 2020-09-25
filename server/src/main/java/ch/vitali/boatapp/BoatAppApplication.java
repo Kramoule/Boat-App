@@ -21,7 +21,7 @@ public class BoatAppApplication {
 			boatRepo.save(new Boat("Big Boat", "You can invite your whole family on this boat!"));
 			boatRepo.save(new Boat("Yacht", "Father of all boats, you can show off what you have with this one."));
 
-			userRepo.save(new User("admin", PasswordUtils.hashPassword("password")));
+			userRepo.save(new User("admin", IdentityUtils.hashPassword("password")));
 		};
 	}
 }

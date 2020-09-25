@@ -2,10 +2,11 @@ package ch.vitali.boatapp;
 
 import javax.persistence.EntityNotFoundException;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.AccessDeniedException;
 
 class UserInput {
     public String getUsername() {
@@ -31,25 +32,47 @@ public class UserController {
 
     @CrossOrigin("*")
     @PostMapping("/login")
-    public boolean loginUser(@RequestBody UserInput user) {
+    public ResponseEntity<Response> loginUser(@RequestBody UserInput user) {
+        String token = "";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         try {
             User u = repository.getOne(user.getUsername());
-            return PasswordUtils.isPasswordOK(u.getHashedPassword(), user.getPassword());
-        } catch (EntityNotFoundException e) {
-            return false;
+            boolean res = IdentityUtils.isPasswordOK(u.getHashedPassword(), user.getPassword());
+            if(res) {
+                token = generateToken(user.getUsername());
+                status = HttpStatus.ACCEPTED;
+            } else throw new AccessDeniedException("");
+        } catch (EntityNotFoundException | AccessDeniedException e) {
+            token = "Wrong credentials";
+            status = HttpStatus.BAD_REQUEST;
         }
+        return new ResponseEntity<>(new Response(token), status);
     }
 
     @CrossOrigin("*")
     @PostMapping("/register")
-    public boolean registerUser(@RequestBody UserInput user){
+    public ResponseEntity<Response> registerUser(@RequestBody UserInput user){
 
+        //Check if user already exists
         if(repository.existsById(user.getUsername()))
-            return false;
+            return new ResponseEntity<>(
+                    new Response(String.format("User %s already exists", user.getUsername())), HttpStatus.CONFLICT);
 
-        User newUser = new User(user.getUsername(), PasswordUtils.hashPassword(user.getPassword()));
+        User newUser = new User(user.getUsername(), IdentityUtils.hashPassword(user.getPassword()));
         repository.save(newUser);
 
-        return true;
+        return new ResponseEntity<>(new Response("Successfully registered"), HttpStatus.CREATED);
+    }
+
+    @CrossOrigin("*")
+    @GetMapping("/verify")
+    public boolean verifyToken(@RequestHeader("authorization") String token) {
+        //From the "Bearer <token>", we get only the <token>
+        String strippedToken = token.split(" ")[1];
+        return IdentityUtils.verifyJWT(strippedToken);
+    }
+
+    private String generateToken(String username) {
+        return IdentityUtils.issueJWT(username);
     }
 }
