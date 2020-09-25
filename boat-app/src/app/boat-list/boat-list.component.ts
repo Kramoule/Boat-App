@@ -1,12 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 import { Boat } from '../boat';
 import { ServerConnectionService } from '../server-connection.service';
 
 export interface DialogData {
   name: string;
   description: string;
+  status: string;
 }
 @Component({
   selector: 'app-boat-list',
@@ -16,35 +19,68 @@ export interface DialogData {
 export class BoatListComponent implements OnInit {
 
   boatList: Boat[] = [];
+  isLoading: boolean;
+  username = '';
+  isUpdate = false;
 
   constructor(
-    public connection: ServerConnectionService,
-    public dialog: MatDialog) {
-    this.fetchList();
+    private connection: ServerConnectionService,
+    private auth: AuthService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private dialog: MatDialog) {
+      this.isLoading = true;
+      console.log(this.activatedRoute.snapshot.params)
+      this.username = this.activatedRoute.snapshot.params.username;
+      this.fetchList();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   fetchList(): void {
-    this.connection.getBoatList().subscribe(list => this.boatList = list);
+    this.connection.getBoatList().subscribe(list => {
+      this.boatList = list;
+      this.isLoading = false;
+    });
   }
 
   removeBoat(id: number): void {
-    this.connection.removeBoatById(id).subscribe(() => {
+    this.connection.removeBoatById(id).subscribe(_ => {
       console.log('Delete Successfully');
-      this.boatList = this.boatList.filter(b => b.id !== id);
+      this.fetchList();
     });
   }
 
   addBoat(boat: Boat): void{
-    this.connection.addBoat(boat).subscribe(b => this.boatList.push(b));
+    this.connection.addBoat(boat).subscribe(_ => this.fetchList());
+  }
+
+  updateBoat(boat: Boat): void {
+    this.connection.updateBoat(boat).subscribe(_ => this.fetchList());
+  }
+
+  openUpdateDialog(boat: Boat): void {
+    const dialogRef = this.dialog.open(DialogAddBoatComponent, {
+      data: {name: boat.name, description: boat.description, status: 'Update'},
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result.name && result.description) {
+        boat.description = result.description;
+        boat.name = result.name;
+        this.updateBoat(boat);
+      }
+    });
   }
 
   openAddDialog(): void {
     const boatName = '';
     const boatDescription = '';
     const dialogRef = this.dialog.open(DialogAddBoatComponent, {
-      data: {name: boatName, description: boatDescription},
+      data: {name: boatName, description: boatDescription, status: 'Add'},
       width: '250px'
     });
 
@@ -65,6 +101,11 @@ export class BoatListComponent implements OnInit {
         this.removeBoat(id);
       }
     });
+  }
+
+  logout(): void {
+    this.auth.logout();
+    this.router.navigateByUrl('/');
   }
 
 }

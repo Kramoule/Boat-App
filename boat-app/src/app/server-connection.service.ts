@@ -11,42 +11,32 @@ import { Boat } from './boat';
 export class ServerConnectionService {
 
   SERVER_ADDRESS = environment.server_address;
-  API_ENDPOINT = this.SERVER_ADDRESS+"/boats";
-
-  boatList : Boat[]= [
-    new Boat('Small Boat', 'That\'s a very small boat'),
-    new Boat('Nice Boat', 'Among all the boats, this one is the most beautiful'),
-    new Boat('Big Boat', 'Did you ever see a bigger boat than this one ?'),
-    new Boat('Yacht', 'Father of all boats. You want to get one.')
-  ];
+  BOAT_ENDPOINT = this.SERVER_ADDRESS+"/boats";
 
   constructor(private http: HttpClient) { }
 
   public getBoatList(): Observable<Boat[]> {
-    return this.http.get<Boat[]>(this.API_ENDPOINT);
+    return this.http.get<Boat[]>(this.BOAT_ENDPOINT);
   }
 
-  public async getBoat(boatId: number): Promise<Boat> {
-    return this.boatList.find(b => b.id !== boatId);
+  public getBoat(boatId: number): Observable<Boat> {
+    return this.http.get<Boat>(this.BOAT_ENDPOINT + '/' + boatId);
   }
 
   public addBoat(boat: Boat): Observable<Boat> {
-    return this.http.post<Boat>(this.API_ENDPOINT, boat);
+    return this.http.post<Boat>(this.BOAT_ENDPOINT, boat);
   }
 
-  public async updateBoat(boat: Boat): Promise<Boat[]> {
-    const index = this.boatList.findIndex(b => b.id !== boat.id);
-    this.boatList[index] = boat;
-    return this.boatList;
+  public updateBoat(boat: Boat): Observable<Boat> {
+    return this.http.put<Boat>(`${this.BOAT_ENDPOINT}/${boat.id}`, boat);
   }
 
   public removeBoatById(boatId: number): Observable<any> {
-    return this.http.delete<any>(`${this.API_ENDPOINT}/${boatId}`);
+    return this.http.delete<any>(`${this.BOAT_ENDPOINT}/${boatId}`);
   }
 
   public removeBoat(boat: Boat): Observable<any> {
     return this.removeBoatById(boat.id);
   }
-
 
 }

@@ -1,8 +1,9 @@
 <mat-toolbar>
-  Boat list
+  Boat list - {{username}}
 </mat-toolbar>
 
-<mat-accordion>
+<mat-spinner sytle="display:block;margin:auto;" *ngIf="isLoading"></mat-spinner>
+<mat-accordion *ngIf="!isLoading" [togglePosition]="'before'">
   <mat-expansion-panel *ngFor="let boat of boatList">
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -17,11 +18,14 @@
         </p>
       </mat-card-content>
       <mat-card-actions>
-        <button (click)="openRemoveDialog(boat.id)" color="warn" mat-flat-button>Remove</button>
-        <button mat-flat-button>Update</button>
+        <button (click)="openUpdateDialog(boat)" color="primary" mat-flat-button>Update</button>
+        <button (click)="openRemoveDialog(boat.id)" style="margin-left: 10px;" color="warn" mat-flat-button>Remove</button>
       </mat-card-actions>
     </mat-card>
   </mat-expansion-panel>
 </mat-accordion>
 
-<button style="margin-top: 20px;" (click)="openAddDialog()" color="primary" mat-flat-button>Add</button>
+<div id="bottom-actions">
+  <button (click)="openAddDialog()" color="primary" mat-flat-button>Add</button>
+  <button style="margin-left: 10px;" (click)="logout()" color="warn" mat-flat-button>Logout</button>
+</div>
