@@ -3,8 +3,6 @@
 The goal of this project is to try different things with Angular and Java Spring.
 Here you can login to access a list of boats. You can then delete/update them or add an new one.
 
-## Frameworks used
-
 ## How to use
 
 ### With docker-compose
