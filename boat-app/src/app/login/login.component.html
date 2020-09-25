@@ -1,1 +1,26 @@
-<p>login works!</p>
+<mat-toolbar>
+    Boat list - Login
+</mat-toolbar>
+
+<mat-card>
+    <form >
+        <mat-card-title>Please Login</mat-card-title>
+        <mat-form-field class="login-form" appearance="fill">
+            <mat-label>Username</mat-label>
+            <input #inputUsername matInput placeholder="Username" minlength="3" required>
+        </mat-form-field>
+
+        <mat-form-field class="login-form" appearance="fill">
+            <mat-label>Enter your password</mat-label>
+            <input #inputPassword matInput [type]="hide ? 'password' : 'text'" minlength="4" required>
+            <button mat-icon-button matSuffix (click)="hide = !hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+        </mat-form-field>
+        <div *ngIf="hasInfo" style="color: red;">{{textInfo}}</div>
+        <mat-card-actions>
+            <button type="submit" (click)="login(inputUsername.value, inputPassword.value)" mat-flat-button color="primary">Login</button>
+            <button (click)="register(inputUsername.value, inputPassword.value)" mat-flat-button style="margin:10px" color="accent">Register</button> 
+        </mat-card-actions>
+    </form>
+</mat-card>
