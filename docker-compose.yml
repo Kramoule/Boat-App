@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  server:
+    build:
+      context: "./server"
+    image: "boat-server:jar"
+    ports:
+      - 8080:8080
+  web:
+    build:
+      context: "./boat-app"
+    image: "boat-web:1.0"
+    ports:
+      - 4200:80
+    depends_on: 
+      - server
