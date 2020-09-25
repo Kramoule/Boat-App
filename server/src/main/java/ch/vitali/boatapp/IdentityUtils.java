@@ -21,7 +21,6 @@ public class IdentityUtils {
     }
 
     public static String hashPassword(String password){
-        System.out.println(SECRET_KEY);
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
