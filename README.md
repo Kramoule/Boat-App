@@ -74,5 +74,5 @@ Different REST routes are available:
 
 ## TODO
 
-- [ ] Add validators to login inputs
+- [x] Add validators to login inputs
 - [ ] Write tests

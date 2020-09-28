@@ -3,24 +3,31 @@
 </mat-toolbar>
 
 <mat-card>
-    <form >
+    <form [formGroup]="loginForm">
         <mat-card-title>Please Login</mat-card-title>
+        
         <mat-form-field class="login-form" appearance="fill">
             <mat-label>Username</mat-label>
-            <input #inputUsername matInput placeholder="Username" minlength="3" required>
+            <input formControlName="username" class="form-control" #inputUsername matInput placeholder="Username">
+            <mat-error *ngIf="loginForm.controls.username.touched && loginForm.controls.username.invalid">
+                Username must have at least 3 characters
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field class="login-form" appearance="fill">
             <mat-label>Enter your password</mat-label>
-            <input #inputPassword matInput [type]="hide ? 'password' : 'text'" minlength="4" required>
+            <input formControlName="password" class="form-control" #inputPassword matInput [type]="hide ? 'password' : 'text'">
             <button mat-icon-button matSuffix (click)="hide = !hide">
-            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
+            <mat-error *ngIf="loginForm.controls.password.invalid">
+                Password must have at least 4 characters
+            </mat-error>
         </mat-form-field>
-        <div *ngIf="hasInfo" style="color: red;">{{textInfo}}</div>
         <mat-card-actions>
-            <button type="submit" (click)="login(inputUsername.value, inputPassword.value)" mat-flat-button color="primary">Login</button>
-            <button (click)="register(inputUsername.value, inputPassword.value)" mat-flat-button style="margin:10px" color="accent">Register</button> 
+            <button type="button" (click)="login(loginForm.value)" mat-flat-button color="primary">Login</button>
+            <button type="submit" (click)="register(loginForm.value)" mat-flat-button style="margin:10px" color="accent">Register</button> 
         </mat-card-actions>
     </form>
+    <div *ngIf="hasInfo" style="color: red;">{{textInfo}}</div>
 </mat-card>

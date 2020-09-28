@@ -1,5 +1,5 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
@@ -13,17 +13,23 @@ export class LoginComponent implements OnInit {
   hide = true;
   hasInfo = false;
   textInfo = '';
+
+  loginForm = new FormGroup({
+    username: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(4)]),
+  });
+
   constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit(): void { }
 
 
-  public login(username: string, password: string): void {
-    this.auth.login(username, password).subscribe(
+  public login(values: {username: string, password: string}): void {
+    this.auth.login(values.username, values.password).subscribe(
       (res) => {
         const token = res['content'];
         this.auth.registerToken(token);
-        this.router.navigateByUrl('/boat-list/'+username);
+        this.router.navigateByUrl('/boat-list/' + values.username);
       },
       (err) => {
         const msg = err.error["content"];
@@ -33,11 +39,15 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  public register(username: string, password: string): void {
-    this.auth.register(username, password).subscribe(
+  public register(values: {username: string, password: string}): void {
+    if(this.loginForm.status !== 'VALID') {
+      return;
+    }
+    this.auth.register(values.username, values.password).subscribe(
       (res) => {
         this.hasInfo = true;
         this.textInfo = 'Account successfully created !';
+        this.loginForm.reset();
     },
     (err) => {
       const msg = err.error["content"];
