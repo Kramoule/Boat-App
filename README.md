@@ -10,7 +10,6 @@ Here you can login to access a list of boats. You can then delete/update them or
 Run `docker-compose up` to run the project.
 
 The web page will be up on port **4200** and the server on port **8080**.
-It's possible to change these value in the `docker-compose.yml`
 
 ### Without docker-compose
 
