@@ -1,6 +1,7 @@
 FROM openjdk:11-slim AS builder
 ADD . /code/
 WORKDIR "/code"
+RUN ["sed", "-i", "s/\r$//", "mvnw"]
 RUN ["./mvnw", "package"]
 
 FROM openjdk:11-slim
