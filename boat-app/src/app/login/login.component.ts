@@ -24,22 +24,22 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void { }
 
 
-  public login(values: {username: string, password: string}): void {
-    this.auth.login(values.username, values.password).subscribe(
-      (res) => {
-        const token = res['content'];
+  public login(values: {username?: string| null, password?: string| null}): void {
+    this.auth.login(values.username, values.password).subscribe({
+      next: (res: any) => {
+        const token = res["content"];
         this.auth.registerToken(token);
         this.router.navigateByUrl('/boat-list/' + values.username);
       },
-      (err) => {
+      error: (err) => {
         const msg = err.error["content"];
         console.error(msg);
         this.hasInfo = true;
         this.textInfo = msg;
-      });
+      }});
   }
 
-  public register(values: {username: string, password: string}): void {
+  public register(values: {username?: string | null, password?: string| null}): void {
     if(this.loginForm.status !== 'VALID') {
       return;
     }

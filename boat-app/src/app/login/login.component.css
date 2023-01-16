@@ -6,6 +6,10 @@ mat-card {
 
 }
 
+mat-card button{
+  margin-left: 25%;
+}
+
 .login-form {
   width: 75%;
 }

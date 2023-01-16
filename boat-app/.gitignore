@@ -3,6 +3,8 @@
 # compiled output
 /dist
 /tmp
+app/**/*.js
+app/**/*.js.map
 /out-tsc
 # Only exists if Bazel was run
 /bazel-out
@@ -32,14 +34,15 @@ speed-measure-plugin*.json
 .history/*
 
 # misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
+.sass-cache/
+connect.lock/
+coverage/
+libpeerconnection.log/
 npm-debug.log
 yarn-error.log
 testem.log
-/typings
+typings/
+.angular/
 
 # System Files
 .DS_Store

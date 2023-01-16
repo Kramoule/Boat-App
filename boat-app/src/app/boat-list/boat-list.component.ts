@@ -30,7 +30,7 @@ export class BoatListComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog) {
       this.isLoading = true;
-      this.username = this.activatedRoute.snapshot.params.username;
+      this.username = this.activatedRoute.snapshot.params["username"];
       this.fetchList();
   }
 
@@ -91,7 +91,7 @@ export class BoatListComponent implements OnInit {
     });
   }
 
-  openRemoveDialog(id): void {
+  openRemoveDialog(id: number): void {
     const dialogRef = this.dialog.open(DialogRemoveBoatComponent);
 
     dialogRef.afterClosed().subscribe(result => {

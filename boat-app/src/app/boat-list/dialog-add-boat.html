@@ -12,7 +12,7 @@
     </mat-form-field>
 </div>
 <div mat-dialog-actions>
-    <button mat-button color="primary" [disabled]="name === '' || description === ''" [mat-dialog-close]="data" color="primary" cdkFocusInitial>
+    <button mat-button color="primary" [disabled]="name === null || description === null" [mat-dialog-close]="data" color="primary" cdkFocusInitial>
         {{data.status}}
     </button>
     <button mat-button (click)="onNoClick()">Cancel</button>
